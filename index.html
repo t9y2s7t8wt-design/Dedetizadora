@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestão — Dedetizadora</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --verde-escuro: #1a3a2a;
+      --verde-medio: #2d6a4f;
+      --verde-claro: #52b788;
+      --bege: #f5f0e8;
+      --bege-escuro: #e8e0d0;
+      --texto: #1a1a1a;
+      --texto-suave: #5a5a5a;
+      --branco: #ffffff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bege);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--verde-escuro);
+      padding: 20px 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icone {
+      width: 36px;
+      height: 36px;
+      background: var(--verde-claro);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-texto {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-nome {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--branco);
+      letter-spacing: 0.3px;
+      line-height: 1.1;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      color: var(--verde-claro);
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .header-data {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    /* RESUMO RÁPIDO */
+    .resumo {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .resumo::-webkit-scrollbar { display: none; }
+
+    .resumo-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 10px 14px;
+      flex-shrink: 0;
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .resumo-numero {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--branco);
+      line-height: 1;
+    }
+
+    .resumo-label {
+      font-size: 10px;
+      color: var(--verde-claro);
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-top: 3px;
+    }
+
+    /* CONTEÚDO */
+    main { padding: 20px; }
+
+    .secao-titulo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--texto-suave);
+      margin: 0 0 12px;
+    }
+
+    /* GRID DE MÓDULOS */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .modulo {
+      background: var(--branco);
+      border: 1.5px solid var(--bege-escuro);
+      border-radius: 16px;
+      padding: 18px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: border-color 0.2s, transform 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modulo:active {
+      transform: scale(0.97);
+      border-color: var(--verde-claro);
+    }
+
+    .modulo-destaque {
+      grid-column: span 2;
+      flex-direction: row;
+      align-items: center;
+      background: var(--verde-escuro);
+      border-color: var(--verde-escuro);
+      padding: 20px;
+    }
+
+    .modulo-icone {
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .modulo-destaque .modulo-icone {
+      font-size: 32px;
+      margin-right: 4px;
+    }
+
+    .modulo-info { flex: 1; }
+
+    .modulo-nome {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--texto);
+      margin-bottom: 3px;
+    }
+
+    .modulo-destaque .modulo-nome {
+      font-size: 16px;
+      color: var(--branco);
+    }
+
+    .modulo-desc {
+      font-size: 11px;
+      color: var(--texto-suave);
+      line-height: 1.4;
+    }
+
+    .modulo-destaque .modulo-desc {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .modulo-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--verde-claro);
+      color: var(--verde-escuro);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+
+    .modulo-destaque .modulo-seta {
+      color: var(--verde-claro);
+      font-size: 20px;
+      margin-left: 8px;
+    }
+
+    /* ATIVIDADE RECENTE */
+    .atividade-lista { display: flex; flex-direction: column; gap: 8px; }
+
+    .atividade-item {
+      background: var(--branco);
+      border: 1.5px solid var(--bege-escuro);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .atividade-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--verde-claro);
+      flex-shrink: 0;
+    }
+
+    .atividade-texto {
+      flex: 1;
+      font-size: 13px;
+      color: var(--texto);
+    }
+
+    .atividade-tempo {
+      font-size: 11px;
+      color: var(--texto-suave);
+    }
+
+    .vazia {
+      text-align: center;
+      padding: 24px;
+      color: var(--texto-suave);
+      font-size: 13px;
+      background: var(--branco);
+      border: 1.5px solid var(--bege-escuro);
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-topo">
+    <div class="logo">
+      <div class="logo-icone">🐛</div>
+      <div class="logo-texto">
+        <span class="logo-nome">Dedetizadora</span>
+        <span class="logo-sub">Gestão</span>
+      </div>
+    </div>
+    <div class="header-data" id="header-data"></div>
+  </div>
+
+  <div class="resumo">
+    <div class="resumo-card">
+      <div class="resumo-numero" id="res-clientes">0</div>
+      <div class="resumo-label">Clientes</div>
+    </div>
+    <div class="resumo-card">
+      <div class="resumo-numero" id="res-os">0</div>
+      <div class="resumo-label">OS abertas</div>
+    </div>
+    <div class="resumo-card">
+      <div class="resumo-numero" id="res-agenda">0</div>
+      <div class="resumo-label">Hoje</div>
+    </div>
+    <div class="resumo-card">
+      <div class="resumo-numero" id="res-orcamentos">0</div>
+      <div class="resumo-label">Orçamentos</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <p class="secao-titulo">Módulos</p>
+
+  <div class="grid">
+
+    <a class="modulo modulo-destaque" href="clientes.html">
+      <div class="modulo-icone">👥</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Clientes</p>
+        <p class="modulo-desc">Cadastro e histórico de clientes</p>
+      </div>
+      <span class="modulo-seta">›</span>
+    </a>
+
+    <a class="modulo" href="ordens.html">
+      <div class="modulo-icone">📋</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Ordens de Serviço</p>
+        <p class="modulo-desc">Abertura e controle</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="orcamentos.html">
+      <div class="modulo-icone">💰</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Orçamentos</p>
+        <p class="modulo-desc">Propostas e aprovações</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="agenda.html">
+      <div class="modulo-icone">📅</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Agenda</p>
+        <p class="modulo-desc">Visitas e serviços</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="certificados.html">
+      <div class="modulo-icone">📜</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Certificados</p>
+        <p class="modulo-desc">Emissão e controle</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="financeiro.html">
+      <div class="modulo-icone">💳</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Financeiro</p>
+        <p class="modulo-desc">Pagamentos e recibos</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="estoque.html">
+      <div class="modulo-icone">📦</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Estoque</p>
+        <p class="modulo-desc">Produtos e insumos</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="compliance.html">
+      <div class="modulo-icone">✅</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Compliance</p>
+        <p class="modulo-desc">Licenças e registros</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="relatorios.html">
+      <div class="modulo-icone">📊</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Relatórios</p>
+        <p class="modulo-desc">Análises e resumos</p>
+      </div>
+    </a>
+
+    <a class="modulo" href="manutencao.html">
+      <div class="modulo-icone">🔧</div>
+      <div class="modulo-info">
+        <p class="modulo-nome">Manutenção</p>
+        <p class="modulo-desc">Equipamentos internos</p>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="secao-titulo">Atividade recente</p>
+  <div id="atividade-recente" class="atividade-lista"></div>
+
+</main>
+
+<script>
+  // Data e hora
+  function atualizarData() {
+    const agora = new Date();
+    const dias = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const dia = dias[agora.getDay()];
+    const data = `${dia}, ${agora.getDate()} ${meses[agora.getMonth()]}`;
+    const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('header-data').innerHTML = `${data}<br>${hora}`;
+  }
+  atualizarData();
+  setInterval(atualizarData, 60000);
+
+  // Resumo
+  const clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
+  const ordens = JSON.parse(localStorage.getItem('ordens') || '[]');
+  const agenda = JSON.parse(localStorage.getItem('agenda') || '[]');
+  const orcamentos = JSON.parse(localStorage.getItem('orcamentos') || '[]');
+
+  document.getElementById('res-clientes').textContent = clientes.length;
+  document.getElementById('res-os').textContent = ordens.filter(o => o.status === 'aberta').length;
+  document.getElementById('res-orcamentos').textContent = orcamentos.filter(o => o.status === 'pendente').length;
+
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  document.getElementById('res-agenda').textContent = agenda.filter(a => a.data === hoje).length;
+
+  // Atividade recente
+  const atividades = JSON.parse(localStorage.getItem('atividades') || '[]');
+  const container = document.getElementById('atividade-recente');
+
+  if (atividades.length === 0) {
+    container.innerHTML = '<div class="vazia">Nenhuma atividade ainda</div>';
+  } else {
+    container.innerHTML = atividades.slice(-5).reverse().map(a => `
+      <div class="atividade-item">
+        <div class="atividade-dot"></div>
+        <span class="atividade-texto">${a.texto}</span>
+        <span class="atividade-tempo">${a.hora}</span>
+      </div>
+    `).join('');
+  }
+</script>
+</body>
+</html>
